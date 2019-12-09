@@ -49,6 +49,8 @@ class _Login extends State<Login> {
     saveData = SaveData();
     userProvider = UserProvider();
 
+//    userProvider.getData();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("saveDataC : ${html.window.localStorage['id']}");
 //      if (saveData.id != null && saveData.id != "" && saveData.id.isNotEmpty) {
@@ -66,7 +68,7 @@ class _Login extends State<Login> {
           return AlertDialog(
             content: Container(
               width: MediaQuery.of(context).size.width / 2.5,
-              height: MediaQuery.of(context).size.height / 2.5,
+              height: MediaQuery.of(context).size.height / 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[

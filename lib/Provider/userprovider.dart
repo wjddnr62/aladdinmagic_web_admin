@@ -35,6 +35,17 @@ class UserProvider {
     }
   }
 
+  updatePass(id) async {
+      final QuerySnapshot result = await firestore()
+          .collection("users")
+          .where("id", "==", id)
+          .get();
+
+      final List<DocumentSnapshot> docs = result.docs;
+
+      await firestore().collection("users").doc(docs[0].id).update(data: {'pass':"1111"});
+  }
+
   insertPoint(id, point, saveLog) async {
     print("dataCheck : ${id}, ${point}");
     final QuerySnapshot result = await firestore()
@@ -57,6 +68,18 @@ class UserProvider {
     await firestore().collection("saveLog").add(saveLog).catchError((e) {
       print("addSaveLogError : ${e.toString()}");
     });
+  }
+
+  getData() async {
+    final QuerySnapshot result = await firestore()
+        .collection("users")
+        .get();
+
+    final List<DocumentSnapshot> docs = result.docs;
+
+    for (int i = 0; i< docs.length; i++) {
+      print("data : ${docs[i].data()}");
+    }
   }
 
 }

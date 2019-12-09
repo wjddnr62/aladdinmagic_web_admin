@@ -1,4 +1,5 @@
 import 'package:aladdinmagic_web/Model/savedata.dart';
+import 'package:aladdinmagic_web/PassInit/passinit.dart';
 import 'package:aladdinmagic_web/Point/point.dart';
 import 'package:aladdinmagic_web/Util/hand_cursor.dart';
 import 'package:aladdinmagic_web/Util/whiteSpace.dart';
@@ -28,7 +29,7 @@ class _Home extends State<Home> {
           return AlertDialog(
             content: Container(
               width: MediaQuery.of(context).size.width / 2.5,
-              height: MediaQuery.of(context).size.height / 2.5,
+              height: MediaQuery.of(context).size.height / 2,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -107,7 +108,8 @@ class _Home extends State<Home> {
   void initState() {
     super.initState();
 
-    menuList..add("포인트 지급");
+    menuList..add("포인트 지급")
+    ..add("비밀번호 초기화");
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("htmlData : ${html.window.localStorage['id']}");
@@ -195,9 +197,9 @@ class _Home extends State<Home> {
                                   child: Text(
                                     menuList[idx] == "포인트 지급"
                                         ? "${menuList[idx]}"
-                                        : "- ${menuList[idx]}",
+                                        : "${menuList[idx]}",
                                     style: TextStyle(
-                                        color: black,
+                                        color: menuList[idx] == selectMenu ? mainColor : black,
                                         fontWeight: FontWeight.w600),
                                     textAlign: TextAlign.start,
                                   ),
@@ -232,7 +234,12 @@ class _Home extends State<Home> {
                       color: white,
                       child: Point(),
                     )
-                  : Container(),
+                  : selectMenu == "비밀번호 초기화" ? Container(
+                width: MediaQuery.of(context).size.width - 228,
+                height: MediaQuery.of(context).size.height - 16 ,
+                color: white,
+                child: PassInit(),
+              ) : Container(),
             )
           ],
         ),

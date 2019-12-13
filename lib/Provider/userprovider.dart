@@ -1,4 +1,5 @@
 import 'dart:async';
+
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
@@ -6,12 +7,10 @@ import 'package:aladdinmagic_web/Model/savedata.dart';
 import 'package:firebase/firebase.dart';
 import 'package:firebase/firestore.dart';
 
-
 class UserProvider {
   SaveData saveData = SaveData();
 
   Future<int> login(id, pass) async {
-
     print("id : ${id}, pass : ${pass}");
 
     final QuerySnapshot result = await firestore()
@@ -36,22 +35,21 @@ class UserProvider {
   }
 
   updatePass(id) async {
-      final QuerySnapshot result = await firestore()
-          .collection("users")
-          .where("id", "==", id)
-          .get();
+    final QuerySnapshot result =
+        await firestore().collection("users").where("id", "==", id).get();
 
-      final List<DocumentSnapshot> docs = result.docs;
+    final List<DocumentSnapshot> docs = result.docs;
 
-      await firestore().collection("users").doc(docs[0].id).update(data: {'pass':"1111"});
+    await firestore()
+        .collection("users")
+        .doc(docs[0].id)
+        .update(data: {'pass': "1111"});
   }
 
   insertPoint(id, point, saveLog) async {
     print("dataCheck : ${id}, ${point}");
-    final QuerySnapshot result = await firestore()
-        .collection("users")
-        .where("id", "==", id)
-        .get();
+    final QuerySnapshot result =
+        await firestore().collection("users").where("id", "==", id).get();
 
     final List<DocumentSnapshot> docs = result.docs;
 
@@ -63,23 +61,63 @@ class UserProvider {
 
     print("documentId : ${await docs[0].id}");
 
-    await firestore().collection("users").doc(docs[0].id).update(data: {'point':pointPlus});
+    await firestore()
+        .collection("users")
+        .doc(docs[0].id)
+        .update(data: {'point': pointPlus});
 
     await firestore().collection("saveLog").add(saveLog).catchError((e) {
       print("addSaveLogError : ${e.toString()}");
     });
   }
 
-  getData() async {
+  withdrawUpdate({code, id, deductionReserve, type, saveLog}) async {
     final QuerySnapshot result = await firestore()
         .collection("users")
+        .where("id", "==", id)
         .get();
 
     final List<DocumentSnapshot> docs = result.docs;
 
-    for (int i = 0; i< docs.length; i++) {
-      print("data : ${docs[i].data()}");
+    final QuerySnapshot withdraw =
+        await firestore().collection("withdraw").where("id", "==", id).where("code", "==", code).get();
+
+    final List<DocumentSnapshot> withdrawDocs = withdraw.docs;
+
+    print("docsLength : ${docs.length}");
+
+    if (type == 1) {
+      await firestore()
+          .collection("withdraw")
+          .doc(withdrawDocs[0].id)
+          .update(data: {'type': 1});
+    } else if (type == 2) {
+      print("test");
+      int pointPlus =
+          await docs[0].data()['point'] + deductionReserve;
+      print("test2");
+      await firestore()
+          .collection("withdraw")
+          .doc(withdrawDocs[0].id)
+          .update(data: {'type': 2});
+      print("test3");
+      await firestore()
+          .collection("users")
+          .doc(docs[0].id)
+          .update(data: {'point': pointPlus});
+      print("test4");
+      await firestore().collection("saveLog").add(saveLog);
+      print("test5");
     }
   }
 
+  getData() async {
+    final QuerySnapshot result = await firestore().collection("users").get();
+
+    final List<DocumentSnapshot> docs = result.docs;
+
+    for (int i = 0; i < docs.length; i++) {
+      print("data : ${docs[i].data()}");
+    }
+  }
 }

@@ -55,7 +55,7 @@ class _Login extends State<Login> {
       print("saveDataC : ${html.window.localStorage['id']}");
 //      if (saveData.id != null && saveData.id != "" && saveData.id.isNotEmpty) {
       if (html.window.localStorage['id'] != null && html.window.localStorage['id'] != "" && html.window.localStorage['id'].isNotEmpty) {
-        Navigator.of(context) .pushNamedAndRemoveUntil("/Home", (Route<dynamic> route) => false);
+        Navigator.of(context).pushNamedAndRemoveUntil("/Home", (Route<dynamic> route) => false);
       }
     });
   }

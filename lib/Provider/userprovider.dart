@@ -6,6 +6,7 @@ import 'dart:html' as html;
 import 'package:aladdinmagic_web/Model/savedata.dart';
 import 'package:firebase/firebase.dart';
 import 'package:firebase/firestore.dart';
+import 'package:intl/intl.dart';
 
 class UserProvider {
   SaveData saveData = SaveData();
@@ -72,6 +73,10 @@ class UserProvider {
   }
 
   withdrawUpdate({code, id, deductionReserve, type, saveLog}) async {
+
+    DateTime now = DateTime.now();
+    String date = DateFormat('yyyy.MM.dd').format(now);
+
     final QuerySnapshot result = await firestore()
         .collection("users")
         .where("id", "==", id)
@@ -90,24 +95,19 @@ class UserProvider {
       await firestore()
           .collection("withdraw")
           .doc(withdrawDocs[0].id)
-          .update(data: {'type': 1});
+          .update(data: {'type': 1, 'date': date});
     } else if (type == 2) {
-      print("test");
       int pointPlus =
           await docs[0].data()['point'] + deductionReserve;
-      print("test2");
       await firestore()
           .collection("withdraw")
           .doc(withdrawDocs[0].id)
-          .update(data: {'type': 2});
-      print("test3");
+          .update(data: {'type': 2, 'date' : date});
       await firestore()
           .collection("users")
           .doc(docs[0].id)
           .update(data: {'point': pointPlus});
-      print("test4");
       await firestore().collection("saveLog").add(saveLog);
-      print("test5");
     }
   }
 

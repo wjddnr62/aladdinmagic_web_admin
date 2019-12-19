@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   intl: ^0.15.8
   firebase: ^6.0.0
+  flutter_datetime_picker: ^1.2.8
 
 
 dev_dependencies:

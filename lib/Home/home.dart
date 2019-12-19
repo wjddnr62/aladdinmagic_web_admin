@@ -1,3 +1,4 @@
+import 'package:aladdinmagic_web/MemberManager/membermanager.dart';
 import 'package:aladdinmagic_web/Model/savedata.dart';
 import 'package:aladdinmagic_web/PassInit/passinit.dart';
 import 'package:aladdinmagic_web/Point/point.dart';
@@ -109,9 +110,7 @@ class _Home extends State<Home> {
   void initState() {
     super.initState();
 
-    menuList..add("포인트 지급")
-    ..add("비밀번호 초기화")
-    ..add("출금관리");
+    menuList..add("포인트 지급")..add("비밀번호 초기화")..add("출금관리")..add("회원관리");
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("htmlData : ${html.window.localStorage['id']}");
@@ -157,16 +156,16 @@ class _Home extends State<Home> {
           GestureDetector(
             onTap: () => backHome(context),
             child: HandCursor(
-            child: Center(
-              child: Padding(
-                padding: EdgeInsets.only(right: 15),
-                child: Text(
-                  "로그아웃",
-                  style: TextStyle(
-                      color: Colors.redAccent, fontWeight: FontWeight.w600),
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.only(right: 15),
+                  child: Text(
+                    "로그아웃",
+                    style: TextStyle(
+                        color: Colors.redAccent, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
-            ),
             ),
           )
         ],
@@ -201,7 +200,9 @@ class _Home extends State<Home> {
                                         ? "${menuList[idx]}"
                                         : "${menuList[idx]}",
                                     style: TextStyle(
-                                        color: menuList[idx] == selectMenu ? mainColor : black,
+                                        color: menuList[idx] == selectMenu
+                                            ? mainColor
+                                            : black,
                                         fontWeight: FontWeight.w600),
                                     textAlign: TextAlign.start,
                                   ),
@@ -232,21 +233,34 @@ class _Home extends State<Home> {
               child: selectMenu == "포인트 지급"
                   ? Container(
                       width: MediaQuery.of(context).size.width - 228,
-                      height: MediaQuery.of(context).size.height - 16 ,
+                      height: MediaQuery.of(context).size.height - 16,
                       color: white,
                       child: Point(),
                     )
-                  : selectMenu == "비밀번호 초기화" ? Container(
-                width: MediaQuery.of(context).size.width - 228,
-                height: MediaQuery.of(context).size.height - 16 ,
-                color: white,
-                child: PassInit(),
-              ) : selectMenu == "출금관리" ? Container(
-                width: MediaQuery.of(context).size.width - 228,
-                height: MediaQuery.of(context).size.height - 16 ,
-                color: white,
-                child: Withdraw(),
-              ) : Container(),
+                  : selectMenu == "비밀번호 초기화"
+                      ? Container(
+                          width: MediaQuery.of(context).size.width - 228,
+                          height: MediaQuery.of(context).size.height - 16,
+                          color: white,
+                          child: PassInit(),
+                        )
+                      : selectMenu == "출금관리"
+                          ? Container(
+                              width: MediaQuery.of(context).size.width - 228,
+                              height: MediaQuery.of(context).size.height - 16,
+                              color: white,
+                              child: Withdraw(),
+                            )
+                          : selectMenu == "회원관리"
+                              ? Container(
+                                  width:
+                                      MediaQuery.of(context).size.width - 228,
+                                  height:
+                                      MediaQuery.of(context).size.height - 16,
+                                  color: white,
+                                  child: MemberManager(),
+                                )
+                              : Container(),
             )
           ],
         ),

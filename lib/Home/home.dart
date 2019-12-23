@@ -256,7 +256,7 @@ class _Home extends State<Home> {
                                   width:
                                       MediaQuery.of(context).size.width - 228,
                                   height:
-                                      MediaQuery.of(context).size.height - 16,
+                                      MediaQuery.of(context).size.height,
                                   color: white,
                                   child: MemberManager(),
                                 )

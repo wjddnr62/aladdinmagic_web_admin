@@ -1161,7 +1161,7 @@ class _MemberManager extends State<MemberManager> {
                                         },
                                         shrinkWrap: true,
                                         itemCount:
-                                            searchCount >= 20 ? searchPageLength : searchCount,
+                                            searchCount >= 20 ? searchPageLength : searchCount - 1,
                                       ),),
                               );
                             }
@@ -1183,7 +1183,22 @@ class _MemberManager extends State<MemberManager> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            if (selectPageNumber != 1) {
+                              if (int.parse(selectPageNumber.toString().substring(selectPageNumber.toString().length - 1, selectPageNumber.toString().length)) == 1) {
+                                if (page.length < 10) {
+                                  if (pageLength == page.length) {
+                                    pageLength = pageLength - int.parse(page.length.toString().substring(page.length.toString().length - 1, page.length.toString().length));
+                                  }
+                                }
+                                pageLength = pageLength - 10;
+                              }
+                              selectPageNumber = selectPageNumber - 1;
+                              print("subString: " + selectPageNumber.toString().substring(selectPageNumber.toString().length - 1, selectPageNumber.toString().length));
+                            }
+                          });
+                        },
                         icon: Icon(Icons.arrow_back_ios),
                       ),
                       ListView.builder(
@@ -1273,7 +1288,24 @@ class _MemberManager extends State<MemberManager> {
                         scrollDirection: Axis.horizontal,
                       ),
                       IconButton(
-                          onPressed: () {}, icon: Icon(Icons.arrow_forward_ios))
+                          onPressed: () {
+                            setState(() {
+                              if (selectPageNumber != page.length) {
+                                if (int.parse(selectPageNumber.toString().substring(selectPageNumber.toString().length - 1, selectPageNumber.toString().length)) == 0) {
+                                  print("page2 : ${pageLength}, ${page.length}");
+                                  if (pageLength + 10 > page.length) {
+                                    pageLength = page.length;
+                                  } else {
+                                    pageLength = pageLength + 10;
+                                    print(pageLength);
+                                  }
+                                }
+                                selectPageNumber = selectPageNumber + 1;
+                                print("subString: " + selectPageNumber.toString().substring(selectPageNumber.toString().length - 1, selectPageNumber.toString().length));
+                              }
+                            });
+
+                          }, icon: Icon(Icons.arrow_forward_ios))
                     ],
                   ),
                 )

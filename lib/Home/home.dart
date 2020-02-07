@@ -5,6 +5,7 @@ import 'package:aladdinmagic_web/Point/point.dart';
 import 'package:aladdinmagic_web/Util/hand_cursor.dart';
 import 'package:aladdinmagic_web/Util/whiteSpace.dart';
 import 'package:aladdinmagic_web/public/colors.dart';
+import 'package:aladdinmagic_web/royal/royal.dart';
 import 'package:aladdinmagic_web/withdraw/withdraw.dart';
 import 'package:flutter/material.dart';
 
@@ -110,7 +111,8 @@ class _Home extends State<Home> {
   void initState() {
     super.initState();
 
-    menuList..add("포인트 지급")..add("비밀번호 초기화")..add("출금관리")..add("회원관리");
+    menuList..add("포인트 지급")..add("비밀번호 초기화")..add("출금관리")..add("로얄번호설정");
+//      ..add("회원관리");
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("htmlData : ${html.window.localStorage['id']}");
@@ -255,12 +257,20 @@ class _Home extends State<Home> {
                               ? Container(
                                   width:
                                       MediaQuery.of(context).size.width - 228,
-                                  height:
-                                      MediaQuery.of(context).size.height,
+                                  height: MediaQuery.of(context).size.height,
                                   color: white,
                                   child: MemberManager(),
                                 )
-                              : Container(),
+                              : selectMenu == "로얄번호설정"
+                                  ? Container(
+                                      width: MediaQuery.of(context).size.width -
+                                          228,
+                                      height:
+                                          MediaQuery.of(context).size.height,
+                                      color: white,
+                                      child: Royal(),
+                                    )
+                                  : Container(),
             )
           ],
         ),

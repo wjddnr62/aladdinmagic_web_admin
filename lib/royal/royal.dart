@@ -11,15 +11,14 @@ import 'package:intl/intl.dart';
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
-class Point extends StatefulWidget {
+class Royal extends StatefulWidget {
   @override
-  _Point createState() => _Point();
+  _Royal createState() => _Royal();
 }
 
-class _Point extends State<Point> {
-  TextEditingController _pointController = TextEditingController();
+class _Royal extends State<Royal> {
+  TextEditingController _royalController = TextEditingController();
 
-  String selectBoxValue = "포인트 지급사유 선택";
   UserProvider userProvider = UserProvider();
 
   insertDialog(msg, id, name, phone) {
@@ -155,7 +154,7 @@ class _Point extends State<Point> {
                                 GestureDetector(
                                   onTap: () {
                                     insertDialog(
-                                        "지급할 포인트 양과\n사유를 설정해주세요.",
+                                        "설정할 로얄 번호를\n입력해 주세요.",
                                         document.data()['id'],
                                         document.data()['name'],
                                         document.data()['phone']);
@@ -194,6 +193,7 @@ class _Point extends State<Point> {
                               ],
                             );
                           }).toList(),
+                          shrinkWrap: true,
                         ),
                       );
                     }
@@ -222,9 +222,8 @@ class Insert extends StatefulWidget {
 }
 
 class _Insert extends State<Insert> {
-  TextEditingController _pointController = TextEditingController();
+  TextEditingController _royalController = TextEditingController();
 
-  String selectBoxValue = "포인트 지급사유 선택";
   UserProvider userProvider = UserProvider();
 
   customDialog(msg) {
@@ -300,9 +299,6 @@ class _Insert extends State<Insert> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    print("widgetmsg : ${widget.msg}");
-
     return Container(
       width: MediaQuery.of(context).size.width / 2.5,
       height: MediaQuery.of(context).size.height / 2.5,
@@ -334,56 +330,20 @@ class _Insert extends State<Insert> {
           whiteSpaceH(10),
           Expanded(
             child: TextFormField(
-              controller: _pointController,
+              controller: _royalController,
               inputFormatters: <TextInputFormatter>[
                 WhitelistingTextInputFormatter.digitsOnly
               ],
+              maxLength: 4,
               decoration: InputDecoration(
                   hintStyle: TextStyle(
                       fontSize: 14, color: Color.fromARGB(255, 167, 167, 167)),
-                  hintText: "지급할 포인트를 적어주세요.",
+                  hintText: "설정할 로얄번호를 입력해주세요.",
                   border: OutlineInputBorder(
                       borderSide: BorderSide(color: mainColor)),
                   focusedBorder: OutlineInputBorder(
                       borderSide: BorderSide(color: mainColor)),
                   contentPadding: EdgeInsets.only(top: 5, bottom: 10, left: 10)),
-            ),
-          ),
-          whiteSpaceH(10),
-          Expanded(
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              child: DropdownButton<String>(
-                isExpanded: true,
-                elevation: 2,
-                style: TextStyle(color: black),
-                items: <String>[
-                  '포인트 지급사유 선택',
-                  '운영팀 적립',
-                  '관리자 세탁 적립',
-                  '관리자 택배 적립',
-                  '관리자 꽃배달 적립',
-                  '관리자 대리운전 적립',
-                  '관리자 퀵서비스 적립',
-                  '관리자 렌트카 적립',
-                  '관리자 영화예매 적립',
-                  '관리자 추천인 적립'
-                ].map((value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      style: TextStyle(color: black),
-                    ),
-                  );
-                }).toList(),
-                value: selectBoxValue,
-                onChanged: (value) {
-                  setState(() {
-                    selectBoxValue = value;
-                  });
-                },
-              ),
             ),
           ),
           whiteSpaceH(30),
@@ -421,49 +381,15 @@ class _Insert extends State<Insert> {
                       DateTime now = DateTime.now();
                       String formatDate = DateFormat('yyyy.MM.dd').format(now);
 
-                      if (_pointController.text == null ||
-                          _pointController.text == "" ||
-                          _pointController.text.isEmpty) {
-                        customDialog("지급할 포인트를 적어주세요.");
-                      } else if (selectBoxValue == "포인트 지급사유 선택") {
-                        customDialog("포인트 지급사유를\n선택해주세요.");
+                      if (_royalController.text == null ||
+                          _royalController.text == "" ||
+                          _royalController.text.isEmpty) {
+                        customDialog("설정할 로얄번호를 입력해주세요..");
                       } else {
                         userProvider
-                            .insertPoint(widget.id, _pointController.text, {
-                          'id': widget.id,
-                          'name': widget.name,
-                          'phone': widget.phone,
-                          'type': 0,
-                          'date': formatDate,
-                          'savePlace': 0,
-                          'saveType': selectBoxValue == "운영팀 적립"
-                              ? 3
-                              : selectBoxValue == "관리자 세탁 적립"
-                              ? 4
-                              : selectBoxValue == "관리자 택배 적립"
-                              ? 5
-                              : selectBoxValue == "관리자 꽃배달 적립"
-                              ? 6
-                              : selectBoxValue == "관리자 대리운전 적립"
-                              ? 7
-                              : selectBoxValue ==
-                              "관리자 퀵서비스 적립"
-                              ? 8
-                              : selectBoxValue ==
-                              "관리자 렌트카 적립"
-                              ? 9
-                              : selectBoxValue ==
-                              "관리자 영화예매 적립"
-                              ? 10
-                              : selectBoxValue ==
-                              "관리자 추천인 적립"
-                              ? 11
-                              : 3,
-                          'point': int.parse(_pointController.text),
-                          'getPointType': 0 // 0 = 본인, 1 = 추천
-                        });
+                            .insertRoyal(widget.id, _royalController.text);
                         Navigator.of(context).pop();
-                        customDialog("정상적으로\n적립되었습니다.");
+                        customDialog("정상적으로\n설정되었습니다.");
                       }
                     },
                     child: HandCursor(

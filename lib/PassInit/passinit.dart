@@ -117,14 +117,14 @@ class _PassInit extends State<PassInit> {
                                         children: <Widget>[
                                           whiteSpaceW(20),
                                           Text(
-                                            document.data()['id'],
+                                            document.data()['id'] == null ? "" : document.data()['id'],
                                             style: TextStyle(color: black),
                                           ),
                                           whiteSpaceW(10),
-                                          Text(document.data()['name']),
+                                          Text(document.data()['name'] == null ? "" : document.data()['name']),
                                           whiteSpaceW(10),
                                           Expanded(
-                                            child: Text(document.data()['phone']),
+                                            child: Text(document.data()['phone'] == null ? "" : document.data()['phone']),
                                           ),
                                           Icon(
                                             Icons.arrow_forward_ios,

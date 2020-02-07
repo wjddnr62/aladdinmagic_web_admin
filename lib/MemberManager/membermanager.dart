@@ -40,7 +40,7 @@ class _MemberManager extends State<MemberManager> {
       final List<DocumentSnapshot> docs = result.docs;
       setState(() {
         searchCount = docs.length;
-        for (int i = 0; i < (searchCount / 10 + 1).toInt(); i++) {
+        for (int i = 0; i < (searchCount / 20 + 1).toInt(); i++) {
           page.add(i);
         }
         print('pageLength : ${page.length}');
@@ -1161,7 +1161,7 @@ class _MemberManager extends State<MemberManager> {
                                         },
                                         shrinkWrap: true,
                                         itemCount:
-                                            searchCount >= 20 ? searchPageLength : searchCount - 1,
+                                            searchCount >= 20 ? selectPageNumber == page.length ? searchPageLength - int.parse(page.length.toString().substring(page.length.toString().length - 1, page.length.toString().length)) : searchPageLength : searchCount - 1,
                                       ),),
                               );
                             }
@@ -1191,8 +1191,14 @@ class _MemberManager extends State<MemberManager> {
                                   if (pageLength == page.length) {
                                     pageLength = pageLength - int.parse(page.length.toString().substring(page.length.toString().length - 1, page.length.toString().length));
                                   }
+                                } else {
+                                  if (int.parse(pageLength.toString().substring(pageLength.toString().length - 1, pageLength.toString().length)) == 0) {
+                                    pageLength = pageLength - 10;
+                                  } else {
+                                    pageLength = pageLength - int.parse(pageLength.toString().substring(pageLength.toString().length - 1, pageLength.toString().length));
+                                  }
                                 }
-                                pageLength = pageLength - 10;
+
                               }
                               selectPageNumber = selectPageNumber - 1;
                               print("subString: " + selectPageNumber.toString().substring(selectPageNumber.toString().length - 1, selectPageNumber.toString().length));
@@ -1228,7 +1234,7 @@ class _MemberManager extends State<MemberManager> {
                                 ),
                               ),
                             );
-                          } else if (pageLength > 10 && pageLength < 20) {
+                          } else if (pageLength > 10) {
                             return Padding(
                               padding:
                                   EdgeInsets.only(top: 10, left: 2, right: 2),
@@ -1242,7 +1248,7 @@ class _MemberManager extends State<MemberManager> {
                                     });
                                   },
                                   child: Text(
-                                    "${idx + 1 + int.parse(pageLength.toString().substring(1, 2))}",
+                                    "${idx + 1}",
                                     style: TextStyle(
                                         color: idx + 1 == selectPageNumber
                                             ? mainColor
@@ -1253,32 +1259,34 @@ class _MemberManager extends State<MemberManager> {
                                 ),
                               ),
                             );
-                          } else if (pageLength >= 20) {
-                            return Padding(
-                              padding:
-                                  EdgeInsets.only(top: 10, left: 2, right: 2),
-                              child: HandCursor(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      selectPageNumber = idx + 1;
-                                      print(
-                                          "check : ${searchPageLength * selectPageNumber}");
-                                    });
-                                  },
-                                  child: Text(
-                                    "${idx + 1 + int.parse(pageLength.toString().substring(1, 2)) + 10}",
-                                    style: TextStyle(
-                                        color: idx + 1 == selectPageNumber
-                                            ? mainColor
-                                            : black,
-                                        fontSize: 16),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                            );
-                          } else {
+                          }
+//                          else if (pageLength >= 20) {
+//                            return Padding(
+//                              padding:
+//                                  EdgeInsets.only(top: 10, left: 2, right: 2),
+//                              child: HandCursor(
+//                                child: GestureDetector(
+//                                  onTap: () {
+//                                    setState(() {
+//                                      selectPageNumber = idx + 1;
+//                                      print(
+//                                          "check : ${searchPageLength * selectPageNumber}");
+//                                    });
+//                                  },
+//                                  child: Text(
+//                                    "${idx + 1 + int.parse(pageLength.toString().substring(1, 2)) + 10}",
+//                                    style: TextStyle(
+//                                        color: idx + 1 == selectPageNumber
+//                                            ? mainColor
+//                                            : black,
+//                                        fontSize: 16),
+//                                    textAlign: TextAlign.center,
+//                                  ),
+//                                ),
+//                              ),
+//                            );
+//                          }
+                          else {
                             return Container();
                           }
                         },
@@ -1291,6 +1299,7 @@ class _MemberManager extends State<MemberManager> {
                           onPressed: () {
                             setState(() {
                               if (selectPageNumber != page.length) {
+                                print("subString: " + selectPageNumber.toString().substring(selectPageNumber.toString().length - 1, selectPageNumber.toString().length));
                                 if (int.parse(selectPageNumber.toString().substring(selectPageNumber.toString().length - 1, selectPageNumber.toString().length)) == 0) {
                                   print("page2 : ${pageLength}, ${page.length}");
                                   if (pageLength + 10 > page.length) {
@@ -1300,8 +1309,9 @@ class _MemberManager extends State<MemberManager> {
                                     print(pageLength);
                                   }
                                 }
+                                print("selectPageNumber : ${selectPageNumber}");
                                 selectPageNumber = selectPageNumber + 1;
-                                print("subString: " + selectPageNumber.toString().substring(selectPageNumber.toString().length - 1, selectPageNumber.toString().length));
+                                print("selectPageNumber2 : ${selectPageNumber}");
                               }
                             });
 

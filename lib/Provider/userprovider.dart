@@ -47,6 +47,17 @@ class UserProvider {
         .update(data: {'pass': "1111"});
   }
 
+  insertRoyal(id, royal) async {
+    final QuerySnapshot result = await firestore().collection("users").where("id", "==", id).get();
+
+    final List<DocumentSnapshot> docs = result.docs;
+
+    await firestore()
+        .collection("users")
+        .doc(docs[0].id)
+        .update(data: {'royalCode': royal});
+  }
+
   insertPoint(id, point, saveLog) async {
     print("dataCheck : ${id}, ${point}");
     final QuerySnapshot result =
